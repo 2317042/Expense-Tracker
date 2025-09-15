@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/2317042/Expense-Tracker.git'
+            }
+        }
+
+        stage('Install Python Dependencies') {
+            steps {
+                // Upgrade pip
+                bat 'python -m pip install --upgrade pip'
+                // Install Flask
+                bat 'python -m pip install flask'
+            }
+        }
+
+        stage('Run Flask App') {
+            steps {
+                // Run your backend + frontend together
+                bat 'python backend.py'  // Replace 'backend.py' with your actual file name
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Expense Tracker Pipeline Finished'
+        }
+        failure {
+            echo 'Pipeline Failed'
+        }
+    }
+}
